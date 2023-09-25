@@ -22,6 +22,8 @@ const CurrencyDisplay = (props) => {
                                 </Typography>
                             </Grid>
                         )
+                    } else {
+                        return ""
                     }
                 })
             }
