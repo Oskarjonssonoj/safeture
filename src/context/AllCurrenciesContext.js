@@ -5,7 +5,7 @@ export const AllCurrenciesContext = createContext();
 const AllCurrenciesProvider = ({ children }) => {
     const [currencyFrom, setCurrencyFrom] = useState('SEK')
     const [currencyTo, setCurrencyTo] = useState('EUR')
-    const [startAmount, setStartAmount] = useState('')
+    const [startAmount, setStartAmount] = useState('1')
 
     const providers = {
         currencyFrom,

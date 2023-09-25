@@ -23,7 +23,7 @@ function App() {
   const [newCurrency, setNewCurrency] = useState(0)
 
   useEffect(() => {
-    if(startAmount) {
+    if(startAmount && data && data.rates) {
       let convertedValue = ((data.rates[currencyTo] / data.rates[currencyFrom]) * startAmount).toFixed(2)
       setNewCurrency(convertedValue)
     }
@@ -52,12 +52,14 @@ function App() {
         <CountrySelection label="To" value={currencyTo} setValue={setCurrencyTo} data={data} loaded={loaded}/>
       </Grid>
 
+        <Box sx={{ textAlign: "left", paddingTop: "1rem", marginTop: "2rem", borderTop: "solid 2px lightgrey"}}>
       { startAmount ? (
-        <Box sx={{ textAlign: "left", marginTop: "1rem" }}>
-          <Typography>{startAmount} {currencyFrom} =</Typography>
-          <Typography variant="h5" sx={{ marginTop: "5px", fontWeight: "bold"}}>{newCurrency} {currencyTo}</Typography>
-        </Box>
+          <Box>
+            <Typography>{startAmount} {currencyFrom} =</Typography>
+            <Typography variant="h5" sx={{ marginTop: "5px", fontWeight: "bold"}}>{newCurrency} {currencyTo}</Typography>
+          </Box>
       ) : "" }
+        </Box>
     </Container>
   );
 }
