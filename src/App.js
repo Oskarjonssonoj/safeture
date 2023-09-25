@@ -1,5 +1,5 @@
 import './App.css';
-import { Container, Typography, Grid } from '@mui/material'
+import { Container, Typography, Grid, Box } from '@mui/material'
 import InputCurrency from './components/InputCurrency';
 import CountrySelection from './components/CountrySelection';
 import ChangeCurrency from './components/ChangeCurrency';
@@ -7,33 +7,27 @@ import { useContext, useEffect, useState } from 'react';
 import { AllCurrenciesContext } from './context/AllCurrenciesContext';
 import useFetchData from './hooks/useFetchData';
 import CurrencyDisplay from './components/CurrencyDisplay';
-import axios from 'axios';
 
 
 function App() {
-  const [newCurrency, setNewCurrency] = useState(0)
-
-  const [data, loaded] = useFetchData('https://restcountries.com/v3.1/all');
+  const [data, loaded] = useFetchData('https://openexchangerates.org/api/latest.json');
   
   const {
     currencyFrom,
     setCurrencyFrom,
-    currencyTo,
+    currencyTo, 
     setCurrencyTo,
     startAmount,
   } = useContext(AllCurrenciesContext)
+  
+  const [newCurrency, setNewCurrency] = useState(0)
 
   useEffect(() => {
     if(startAmount) {
-      axios(`https://api.exchangerate-api.com/v4/latest/${currencyFrom}`)
-      .then(response => {
-        // console.log(currencyTo / response.data.rates[currencyFrom])
-        let convertedValue = ((response.data.rates[currencyTo] / response.data.rates[currencyFrom]) * startAmount).toFixed(2)
-
-        console.log(convertedValue)
-      })
+      let convertedValue = ((data.rates[currencyTo] / data.rates[currencyFrom]) * startAmount).toFixed(2)
+      setNewCurrency(convertedValue)
     }
-  }, [startAmount])
+  }, [startAmount, currencyTo, currencyFrom, data, data.rates])
 
   const containerStyleProps = {
     background: "#fdfdfd",
@@ -41,14 +35,15 @@ function App() {
     color: "#222",
     minHeight: "20rem",
     borderRadius: 2,
-    padding: "4rem 2rem",
+    padding: "2rem",
     boxShadow: "0px 10px 15px -3px rgba(0,0,0,0.1)",
-    position: "relative"
+    position: "relative",
+    marginTop: "10rem"
   }
 
   return (
     <Container maxWidth="md" sx={containerStyleProps}>
-      <Typography variant="h5" sx={{ marginBottom: "2rem", marginTop: "1rem"}}>Currency Converter</Typography>
+      <Typography variant="h5" sx={{ marginBottom: "2rem", fontWeight: "bold"}}>Currency Converter</Typography>
       <Grid container spacing={2}>
         <CurrencyDisplay data={data}/>
         <InputCurrency/>
@@ -56,6 +51,13 @@ function App() {
         <ChangeCurrency />
         <CountrySelection label="To" value={currencyTo} setValue={setCurrencyTo} data={data} loaded={loaded}/>
       </Grid>
+
+      { startAmount ? (
+        <Box sx={{ textAlign: "left", marginTop: "1rem" }}>
+          <Typography>{startAmount} {currencyFrom} =</Typography>
+          <Typography variant="h5" sx={{ marginTop: "5px", fontWeight: "bold"}}>{newCurrency} {currencyTo}</Typography>
+        </Box>
+      ) : "" }
     </Container>
   );
 }
