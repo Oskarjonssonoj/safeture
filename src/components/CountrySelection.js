@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Grid, Autocomplete, TextField, Skeleton } from '@mui/material'
-import useFetchData from '../hooks/useFetchData'
 
 const CountrySelection = (props) => {
     const { value, setValue, label, data, loaded } = props;

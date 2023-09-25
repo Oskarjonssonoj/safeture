@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AllCurrenciesContext } from './context/AllCurrenciesContext';
 import useFetchData from './hooks/useFetchData';
 import CurrencyDisplay from './components/CurrencyDisplay';
+// import axios from 'axios';
 
 
 function App() {
